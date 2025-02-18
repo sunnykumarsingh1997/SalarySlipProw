@@ -92,15 +92,20 @@ export default function SalaryCalculator() {
 
       const slip: SalarySlip = {
         employeeDetails: details,
-        earnings: calculatedSlip.earnings,
-        deductions: calculatedSlip.deductions,
+        earnings: components,
+        deductions: deductions,
         netSalary: calculatedSlip.netSalary
       };
 
       setSalarySlip(slip);
 
       // Save to database
-      await apiRequest('POST', '/api/salary-slips', slip);
+      await apiRequest('POST', '/api/salary-slips', {
+        employeeDetails: details,
+        earnings: components,
+        deductions: deductions,
+        netSalary: calculatedSlip.netSalary
+      });
 
       toast({
         title: "Salary slip generated and saved successfully",
