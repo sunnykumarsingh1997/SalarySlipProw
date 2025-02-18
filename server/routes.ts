@@ -22,11 +22,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create a new salary slip
   app.post("/api/salary-slips", async (req, res) => {
     try {
-      const data = insertSalarySlipSchema.parse(req.body);
+      const data = insertSalarySlipSchema.parse({
+        employeeDetails: req.body.employeeDetails,
+        earnings: req.body.earnings,
+        deductions: req.body.deductions,
+        netSalary: req.body.netSalary
+      });
       const slip = await storage.createSalarySlip(data);
       res.status(201).json(slip);
     } catch (error) {
-      res.status(400).json({ message: "Invalid salary slip data" });
+      console.error('Validation error:', error);
+      res.status(400).json({ message: "Invalid salary slip data", error: error });
     }
   });
 
